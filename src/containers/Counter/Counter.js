@@ -1,11 +1,13 @@
 import React from "react";
 
+import { connect } from "react-redux";
+
 import CounterControl from "../../components/CounterControl/CounterControl";
-import CounterControl from "../../components/CounterOutput/CounterOutput";
+import CounterOutput from "../../components/CounterOutput/CounterOutput";
 
 class Counter extends React.Component {
   state = {
-    Counter: 0,
+    counter: 0,
   };
 
   counterChangeHandler = (action, value) => {
@@ -30,30 +32,46 @@ class Counter extends React.Component {
           return { counter: prevState.counter - value };
         });
         break;
+      default:
+        return;
     }
   };
 
   render() {
     return (
       <div>
-        <CounterOutput value={this.state.counter} />
+        <CounterOutput value={this.props.ctr} />
+        <CounterControl label="Add" clicked={this.props.onIncrement} />
         <CounterControl
-          label="add"
-          clicked={() => this.counterChangeHandler("inc")}
-        />
-        <CounterControl
-          label="remove"
+          label="Remove"
           clicked={() => this.counterChangeHandler("dec")}
         />
         <CounterControl
-          label="add2"
-          clicked={() => this.counterChangeHandler("add")}
+          label="Add 2"
+          clicked={() => this.counterChangeHandler("add", 2)}
         />
         <CounterControl
-          label="remove2"
-          clicked={() => this.counterChangeHandler("sub")}
+          label="Remove 2"
+          clicked={() => this.counterChangeHandler("sub", 2)}
         />
       </div>
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    ctr: state.counter,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onIncrement: () =>
+      dispatch({
+        type: "INCREMENT",
+      }),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Counter);
