@@ -4,56 +4,23 @@ import { connect } from "react-redux";
 
 import CounterControl from "../../components/CounterControl/CounterControl";
 import CounterOutput from "../../components/CounterOutput/CounterOutput";
+import { type } from "@testing-library/user-event/dist/type";
 
 class Counter extends React.Component {
-  state = {
-    counter: 0,
-  };
-
-  counterChangeHandler = (action, value) => {
-    switch (action) {
-      case "inc":
-        this.setState((prevState) => {
-          return { counter: prevState.counter + 1 };
-        });
-        break;
-      case "dec":
-        this.setState((prevState) => {
-          return { counter: prevState.counter - 1 };
-        });
-        break;
-      case "add":
-        this.setState((prevState) => {
-          return { counter: prevState.counter + value };
-        });
-        break;
-      case "sub":
-        this.setState((prevState) => {
-          return { counter: prevState.counter - value };
-        });
-        break;
-      default:
-        return;
-    }
-  };
-
   render() {
     return (
       <div>
         <CounterOutput value={this.props.ctr} />
         <CounterControl label="Add" clicked={this.props.onIncrement} />
-        <CounterControl
-          label="Remove"
-          clicked={() => this.counterChangeHandler("dec")}
-        />
-        <CounterControl
-          label="Add 2"
-          clicked={() => this.counterChangeHandler("add", 2)}
-        />
-        <CounterControl
-          label="Remove 2"
-          clicked={() => this.counterChangeHandler("sub", 2)}
-        />
+        <CounterControl label="Remove" clicked={this.props.onDecrement} />
+        <CounterControl label="Add 2" clicked={this.props.onAdd} />
+        <CounterControl label="Remove 2" clicked={this.props.onSub} />
+        <div>
+          <button onClick={this.props.onSotreResult}>show store</button>
+          {this.props.storeResult.map((item) => {
+            return <p key={item}>{item}</p>;
+          })}
+        </div>
       </div>
     );
   }
@@ -62,6 +29,7 @@ class Counter extends React.Component {
 const mapStateToProps = (state) => {
   return {
     ctr: state.counter,
+    storeResult: state.result,
   };
 };
 
@@ -71,6 +39,21 @@ const mapDispatchToProps = (dispatch) => {
       dispatch({
         type: "INCREMENT",
       }),
+    onDecrement: () =>
+      dispatch({
+        type: "DECREMENT",
+      }),
+    onAdd: () =>
+      dispatch({
+        type: "ADD",
+        value: 2,
+      }),
+    onSub: () =>
+      dispatch({
+        type: "SUB",
+        value: 2,
+      }),
+    onSotreResult: () => dispatch({ type: "RESULT" }),
   };
 };
 

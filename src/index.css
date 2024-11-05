@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  padding: 0;
+  direction: ltr;
+}
+
+button {
+  background-color: #3949ab;
+  border: none;
+  padding: 0.6rem 1rem;
+  color: white;
+  font: inherit;
+  border-radius: 3px;
+  outline: none;
+}
